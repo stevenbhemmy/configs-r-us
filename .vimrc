@@ -174,8 +174,13 @@ set mat=2
 " Press F2 to ensure pasted text is not changed
 set pastetoggle=<F2>
 
-" Change gutter
-set number
+" Change gutter with Ctrl-n
+nnoremap <C-n> :set relativenumber!<cr>
+augroup gutter
+    autocmd!
+    autocmd WinEnter * :set relativenumber
+    autocmd WinLeave * :let &relativenumber=0
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text, tab and indent related
