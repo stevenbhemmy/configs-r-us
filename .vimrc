@@ -23,7 +23,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'scrooloose/syntastic'
+"Plugin 'scrooloose/syntastic'
 "Plugin 'klen/python-mode'
 Plugin 'kien/ctrlp.vim'
 Plugin 'd11wtq/ctrlp_bdelete.vim'
@@ -70,7 +70,7 @@ colorscheme solarized
 " set statusline+=%{SyntasticStatuslineFlag()}
 " set statusline+=%*
 
-let b:syntastic_mode = "passive"
+let g:syntastic_mode = "passive"
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
@@ -94,9 +94,7 @@ let g:airline_powerline_fonts = 1
 " endfunction
 augroup airline_autocmd
     autocmd!
-    " autocmd WinEnter * AirlineRefresh
     autocmd BufEnter * AirlineRefresh
-    " autocmd BufEnter * call AirlineInit()
 augroup END
 
 " Bufferline settings
@@ -116,6 +114,9 @@ call ctrlp_bdelete#init()
 augroup jinja-syntax
     au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stmi,*.jinja set ft=jinja
 augroup END
+
+" Use Exuberant Ctags with YouCompleteMe
+let g:ycm_collect_identifiers_from_tags_files = 1
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => VIM user interface
@@ -175,6 +176,7 @@ set mat=2
 set pastetoggle=<F2>
 
 " Change gutter with Ctrl-n
+set number
 nnoremap <C-n> :set relativenumber!<cr>
 augroup gutter
     autocmd!
