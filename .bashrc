@@ -15,6 +15,9 @@ WORKON_HOME=/home/shemmy/.venvs
 export WORKON_HOME
 source /usr/bin/virtualenvwrapper.sh
 
+# Generic timestamp for backups/migrations/etc
+alias upnow="NOW=$(date "+%Y-%m-%d-%H%M%S")"
+
 # Change terminal colors for Solarized colorscheme
 # export TERM=screen-256color-bce
 
