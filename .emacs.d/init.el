@@ -1,10 +1,10 @@
 ;; Save session, every 60 seconds.
 (desktop-save-mode t)
-(desktop-change-dir "/home/shemmy/.emacs.d/")
+(desktop-change-dir "/Users/shemmy/.emacs.d/")
 (setq desktop-auto-save-timeout 60)
 
 ;; Default font
-(set-default-font "Inconsolata 13")
+(set-default-font "Inconsolata 16")
 
 ;; Get rid of splash page
 (setq inhibit-startup-message t)

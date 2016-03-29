@@ -9,11 +9,11 @@ fi
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
-PATH=$PATH:/home/shemmy/bin
-export PATH
-WORKON_HOME=/home/shemmy/.venvs
-export WORKON_HOME
-source /usr/bin/virtualenvwrapper.sh
+# PATH=$PATH:/home/shemmy/bin
+# export PATH
+# WORKON_HOME=/home/shemmy/.venvs
+# export WORKON_HOME
+# source /usr/bin/virtualenvwrapper.sh
 
 # Generic timestamp for backups/migrations/etc
 alias upnow="NOW=$(date "+%Y-%m-%d-%H%M%S")"
