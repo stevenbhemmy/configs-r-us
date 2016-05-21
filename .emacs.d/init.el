@@ -22,6 +22,9 @@
 ;; Show trailing whitespace
 (setq-default show-trailing-whitespace t)
 
+;; Use spaces instead of tabs
+(setq-default indent-tabs-mode nil)
+
 (require 'package)
 ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/")) ;issue with TLS
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -40,9 +43,12 @@
 		      evil-surround
 		      evil-smartparens
 		      evil-commentary
+		      exec-path-from-shell
 		      gist
 		      helm
 		      ido
+		      jedi
+		      jinja2-mode
 		      linum-off
 		      linum-relative
 		      org
@@ -58,12 +64,24 @@
   (unless (package-installed-p p)
     (package-install p)))
 
+;; Mac fix for environment var weirdness
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
+
 ;; Evil mode stuff
 (require 'evil)
 (evil-mode 1)
 (require 'evil-surround)
 (global-evil-surround-mode 1)
 (evil-commentary-mode)
+
+;; Detect .jinja suffix
+(require 'jinja2-mode)
+(add-to-list 'auto-mode-alist '("\\.jinja\\'" . jinja2-mode))
+(setq sgml-basic-offset 4)
+
+;; Change javascript indent
+(setq js-indent-level 2)
 
 ;; For easy gists
 (require 'gist)
@@ -79,6 +97,8 @@
 (global-set-key (kbd "C-x b") 'helm-mini)
 (setq helm-buffers-fuzzy-match t)
 (setq helm-find-files-fuzzy-match t)
+(setq helm-autoresize-mode 30)
+(setq helm-split-window-in-side-p t)
 
 ;; Projectile
 (projectile-global-mode)
@@ -88,7 +108,7 @@
 
 ;; Show numbers
 (require 'linum-relative)
-(global-linum-mode 1)
+(global-linum-mode t)
 (linum-relative-on)
 (setq linum-relative-format "%3s \u2502")
 (setq linum-relative-current-symbol "")
@@ -163,6 +183,10 @@
 ;; Popping-up contextual docs
 (eval-after-load "cider"
   '(define-key cider-mode-map (kbd "C-c C-d") 'ac-cider-popup-doc))
+
+;; Python auto complete
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 
 
 (custom-set-variables
