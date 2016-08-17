@@ -26,9 +26,9 @@
 (setq-default indent-tabs-mode nil)
 
 (require 'package)
-;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/")) ;issue with TLS
+;(add-to-list 'package-archives '("marmalade" . "")) ;issue with TLS
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("marmalade" . "http://marmalade.ferrier.me.uk/packages/")
+			 ("marmalade" . "http://marmalade-repo.org/packages/")
 			 ("melpa-stable" . "http://stable.melpa.org/packages/")
 			 ("melpa" . "http://melpa.org/packages/")
 			 ("org" . "http://orgmode.org/elpa/")))
@@ -63,6 +63,9 @@
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
+
+(require 'cider)
+(setq cider-known-endpoints '(("goodsie dev" "127.0.0.1" "7888")))
 
 ;; Mac fix for environment var weirdness
 (when (memq window-system '(mac ns))
