@@ -6,6 +6,9 @@
 ;; Default font
 (set-default-font "Inconsolata 16")
 
+;; Don't make me type "yes" or "no"
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;; Get rid of splash page
 (setq inhibit-startup-message t)
 (setq initial-scratch-message nil)
@@ -28,41 +31,52 @@
 (require 'package)
 ;(add-to-list 'package-archives '("marmalade" . "")) ;issue with TLS
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-			 ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("melpa-stable" . "http://stable.melpa.org/packages/")
-			 ("melpa" . "http://melpa.org/packages/")
-			 ("org" . "http://orgmode.org/elpa/")))
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa-stable" . "http://stable.melpa.org/packages/")
+                         ("melpa" . "http://melpa.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
 
 ;; Auto install packages not present
 (defvar my-packages '(auto-complete
-		      ac-cider
-		      cider
-		      clojure-mode
-		      evil
-		      evil-surround
-		      evil-smartparens
-		      evil-commentary
-		      exec-path-from-shell
-		      gist
-		      helm
-		      ido
-		      jedi
-		      jinja2-mode
-		      linum-off
-		      linum-relative
-		      org
-		      popup
-		      powerline
-		      projectile
-		      helm-projectile
-		      python-mode
-		      rainbow-delimiters
-		      smartparens
-		      solarized-theme))
+                      ac-cider
+                      cider
+                      clojure-mode
+                      evil
+                      evil-surround
+                      evil-smartparens
+                      evil-commentary
+                      exec-path-from-shell
+                      gist
+                      helm
+                      ido
+                      jedi
+                      jinja2-mode
+                      linum-off
+                      linum-relative
+                      org
+                      popup
+                      powerline
+                      projectile
+                      helm-projectile
+                      python-mode
+                      rainbow-delimiters
+                      smartparens
+                      solarized-theme))
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
+
+;; For stuff not in package repositories
+(add-to-list 'load-path "/Users/steve/.emacs.d/parinfer-mode/")
+
+;;Parinfer
+(require 'parinfer-mode)
+(add-hook 'prod-mode-hook 'parinfer-mode)
+(add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
+(add-hook 'lisp-mode-hook 'parinfer-mode)
+(add-hook 'scheme-mode-hook 'parinfer-mode)
+(add-hook 'clojure-mode-hook 'parinfer-mode)
 
 (require 'cider)
 (setq cider-known-endpoints '(("goodsie dev" "127.0.0.1" "7888")))
@@ -136,29 +150,40 @@
 ;; Highlight matching parens
 (show-paren-mode 1)
 (setq show-paren-delay 0)
-;; Smart parentheses for lisps
-(require 'smartparens-config)
-(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
-(add-hook 'lisp-mode-hook 'smartparens-mode)
-(add-hook 'scheme-mode-hook 'smartparens-mode)
-(add-hook 'clojure-mode-hook 'smartparens-mode)
-(add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
 
-(defadvice show-paren-function
-    (after show-matching-paren-offscreen activate)
-    "If the matching paren is offscreen show the matching line in the
-     echo area. Has no effect if the character before point is not of
-     syntax class ')'."
-    (interactive)
-    (let* ((cb (char-before (point)))
-	   (matching-text (and cb
-			       (char-equal (char-syntax cb) ?\) )
-			       (blink-matching-open))))
-       (when matching-text (message matching-text))))
+;; Smart parentheses for lisps
+;; (require 'smartparens-config)
+;; (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+;; (add-hook 'lisp-mode-hook 'smartparens-mode)
+;; (add-hook 'scheme-mode-hook 'smartparens-mode)
+;; (add-hook 'clojure-mode-hook 'smartparens-mode)
+;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
+
+;; (defadvice show-paren-function
+;;     (after show-matching-paren-offscreen activate)
+;;     "If the matching paren is offscreen show the matching line in the
+;;      echo area. Has no effect if the character before point is not of
+;;      syntax class ')'."
+;;     (interactive)
+;;     (let* ((cb (char-before (point)))
+;; 	   (matching-text (and cb
+;; 			       (char-equal (char-syntax cb) ?\) )
+;; 			       (blink-matching-open))))
+;;        (when matching-text (message matching-text))))
 
 ;; Powerline stuff
 (require 'powerline)
 (powerline-center-evil-theme)
+(setq powerline-color1 "#073642")
+(setq powerline-color2 "#002b36")
+
+(set-face-attribute 'mode-line nil
+                    :foreground "#fdf6e3"
+                    :background "#2aa198"
+                    :box nil)
+(set-face-attribute 'mode-line-inactive nil
+                    :inverse-video nil
+                    :box nil)
 
 ;; Ido mode stuff
 ;; (require 'ido)
@@ -201,9 +226,8 @@
  '(custom-safe-themes
    (quote
     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default))))
-(custom-set-faces
+(custom-set-faces)
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
