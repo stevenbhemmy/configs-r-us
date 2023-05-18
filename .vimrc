@@ -23,8 +23,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'altercation/vim-colors-solarized'
-"Plugin 'scrooloose/syntastic'
-"Plugin 'klen/python-mode'
 Plugin 'kien/ctrlp.vim'
 Plugin 'd11wtq/ctrlp_bdelete.vim'
 Plugin 'tpope/vim-fugitive'
@@ -59,49 +57,25 @@ filetype plugin indent on    " required
 syntax enable
 set background=dark
 set t_Co=16
-"if !has('gui_running')
-"  let g:solarized_termcolors=&t_Co
-"endif
+if !has('gui_running')
+  let g:solarized_termcolors=&t_Co
+endif
 colorscheme solarized
 
-" Syntastic settings
-" set statusline+=%*
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-
-let g:syntastic_mode = "passive"
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_aggregate_erros = 1
-let g:syntastic_ruby_checkers = ["rubocop"]
-let g:syntastic_sass_checkers = ["sass"]
-let g:syntastic_html_checkers = ["tidy"]
-let g:syntastic_python_checkers = ["flake8"]
-let g:syntastic_javascript_checkers = ["jslint"]
-
-
 " Airline settings
-let g:airline_powerline_fonts = 1
-" function! AirlineInit()
-"     let g:airline_section_a = airline#section#create(['mode'])
-"     let g:airline_section_b = airline#section#create_left(['branch'])
-"     let g:airline_section_c = airline#section#create(['paste'])
-"     let g:airline_section_x = airline#section#create(['ffenc'])
-"     let g:airline_section_y = airline#section#create(['filetype'])
-" endfunction
+" let g:airline_powerline_fonts = 1
+function! AirlineInit()
+    let g:airline_section_a = airline#section#create(['mode'])
+    let g:airline_section_b = airline#section#create_left(['branch'])
+    let g:airline_section_c = airline#section#create(['paste'])
+    let g:airline_section_x = airline#section#create(['ffenc'])
+    let g:airline_section_y = airline#section#create(['filetype'])
+endfunction
 augroup airline_autocmd
-    autocmd!
-    autocmd BufEnter * AirlineRefresh
+   autocmd!
+   autocmd BufEnter * AirlineRefresh
 augroup END
 
-" Bufferline settings
-"let g:bufferline_echo = 1
-"autocmd VimEnter *
-   " \ let &statusline='%{bufferline#refresh_status()}'
-   " \ .bufferline#get_status_string()
 
 " CtrlP settings
 let g:ctrlp_map = '<c-p>'

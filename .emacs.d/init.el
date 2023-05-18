@@ -1,10 +1,16 @@
 ;; Save session, every 60 seconds.
-(desktop-save-mode t)
-(desktop-change-dir "/Users/shemmy/.emacs.d/")
+(defconst my-savefile-dir "/home/shemmy/.emacs.d")
+(setq desktop-path (list my-savefile-dir))
+(setq desktop-dirname my-savefile-dir)
+(setq desktop-restore-eager 5)
+(setq desktop-load-locked-desktop t)
 (setq desktop-auto-save-timeout 60)
+(desktop-save-mode +1)
 
 ;; Default font
-(set-default-font "Inconsolata 16")
+(set-face-attribute 'default t
+                    :font "Hack 10")
+(set-frame-font "Hack 10" nil t)
 
 ;; Don't make me type "yes" or "no"
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -29,7 +35,6 @@
 (setq-default indent-tabs-mode nil)
 
 (require 'package)
-;(add-to-list 'package-archives '("marmalade" . "")) ;issue with TLS
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
                          ("melpa-stable" . "http://stable.melpa.org/packages/")
@@ -40,8 +45,10 @@
 ;; Auto install packages not present
 (defvar my-packages '(auto-complete
                       ac-cider
+                      blacken
                       cider
                       clojure-mode
+                      color-theme-approximate
                       evil
                       evil-surround
                       evil-smartparens
@@ -49,6 +56,7 @@
                       exec-path-from-shell
                       gist
                       helm
+                      helm-projectile
                       ido
                       jedi
                       jinja2-mode
@@ -58,28 +66,27 @@
                       popup
                       powerline
                       projectile
-                      helm-projectile
                       python-mode
                       rainbow-delimiters
                       smartparens
-                      solarized-theme))
+                      solarized-theme
+                      undo-tree))
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
 
-;; For stuff not in package repositories
-(add-to-list 'load-path "/Users/steve/.emacs.d/parinfer-mode/")
-
-;;Parinfer
-(require 'parinfer-mode)
-(add-hook 'prod-mode-hook 'parinfer-mode)
-(add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
-(add-hook 'lisp-mode-hook 'parinfer-mode)
-(add-hook 'scheme-mode-hook 'parinfer-mode)
-(add-hook 'clojure-mode-hook 'parinfer-mode)
+;; '' For stuff not in package repositories
+;; (add-to-list 'load-path "/home/shemmy/.emacs.d/parinfer-mode/")
+;; 
+;; ;;Parinfer
+;; (require 'parinfer-mode)
+;; (add-hook 'prod-mode-hook 'parinfer-mode)
+;; (add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
+;; (add-hook 'lisp-mode-hook 'parinfer-mode)
+;; (add-hook 'scheme-mode-hook 'parinfer-mode)
+;; (add-hook 'clojure-mode-hook 'parinfer-mode)
 
 (require 'cider)
-(setq cider-known-endpoints '(("goodsie dev" "127.0.0.1" "7888")))
 
 ;; Mac fix for environment var weirdness
 (when (memq window-system '(mac ns))
@@ -91,6 +98,12 @@
 (require 'evil-surround)
 (global-evil-surround-mode 1)
 (evil-commentary-mode)
+;; evil mode requires setting an undo system for some god forsaken reason
+;; apparently redo working out of the box is too much to ask ffs
+(global-undo-tree-mode)
+(setq evil-undo-system 'undo-tree)
+(define-key evil-normal-state-map "u" 'undo-tree-undo)
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 
 ;; Detect .jinja suffix
 (require 'jinja2-mode)
@@ -171,19 +184,6 @@
 ;; 			       (blink-matching-open))))
 ;;        (when matching-text (message matching-text))))
 
-;; Powerline stuff
-(require 'powerline)
-(powerline-center-evil-theme)
-(setq powerline-color1 "#073642")
-(setq powerline-color2 "#002b36")
-
-(set-face-attribute 'mode-line nil
-                    :foreground "#fdf6e3"
-                    :background "#2aa198"
-                    :box nil)
-(set-face-attribute 'mode-line-inactive nil
-                    :inverse-video nil
-                    :box nil)
 
 ;; Ido mode stuff
 ;; (require 'ido)
@@ -213,21 +213,41 @@
   '(define-key cider-mode-map (kbd "C-c C-d") 'ac-cider-popup-doc))
 
 ;; Python auto complete
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:complete-on-dot t)
 
+;; Solarized theme
+(color-theme-approximate-on)
+(load-theme 'solarized-dark t)
 
+;; Powerline stuff
+(require 'powerline)
+(powerline-center-evil-theme)
+(setq powerline-color1 "#073642")
+(setq powerline-color2 "#002b36")
+
+(set-face-attribute 'mode-line nil
+                    :foreground "#fdf6e3"
+                    :background "#2aa198"
+                    :box nil)
+(set-face-attribute 'mode-line-inactive nil
+                    :inverse-video nil
+                    :box nil)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (solarized-dark)))
  '(custom-safe-themes
    (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default))))
-(custom-set-faces)
+    ("51ec7bfa54adf5fff5d466248ea6431097f5a18224788d0bd7eb1257a4f7b773" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default)))
+ '(line-number-mode nil)
+ '(package-selected-packages
+   (quote
+    (color-theme-approximate undo-tree undo-fu solarized-theme rainbow-delimiters python-mode powerline linum-relative linum-off jinja2-mode jedi helm-projectile gist exec-path-from-shell evil-surround evil-smartparens evil-commentary ac-cider))))
+(custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ )

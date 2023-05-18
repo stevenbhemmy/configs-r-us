@@ -27,8 +27,8 @@ colors
 autoload -Uz compinit vcs_info
 compinit
 HISTFILE=~/.histfile
-HISTSIZE=1500
-SAVEHIST=1500
+HISTSIZE=3500
+SAVEHIST=3500
 setopt appendhistory sharehistory autocd transient_rprompt hist_ignore_all_dups prompt_subst
 bindkey -e
 
@@ -90,9 +90,8 @@ zstyle ':vcs_info:*' actionformats "$vcs_name_color(%s) $vcs_branch_color%b$vcs_
 export PAGER=less
 export LESS="-iMSx4 -FXe -R"
 export ESHELL=/bin/zsh
-export EDITOR=/usr/bin/emacs
+export EDITOR=/usr/bin/vim
 export WORDCHARS="*?_-.[]~=&;!#$%^(){}<>"
-export PGUSER="goodsie"
 export PATH=$PATH:/usr/local/bin
 
 alias -g '...'='../..'
@@ -216,3 +215,23 @@ export PS1='
 $userpart $tty_color%l $(time_display)%(?..$error_color %? $end_error_color)
 $(virt_prompt)$prompt_color%#%{$reset_color%} '
 export RPS1='$path_color%/%{$reset_color%} $(vcs_prompt)'
+
+
+workon (){
+    pyenv activate $1
+    cd ~/sites/$1
+}
+
+# Python Poetry config
+export PATH="$HOME/.local/bin:$PATH"
+export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+
+# Pyenv configuration
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+
+
+export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
