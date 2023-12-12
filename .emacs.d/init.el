@@ -34,6 +34,10 @@
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
 
+;; Show line at 80 chars
+(setq-default fill-column 80)
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+
 (require 'package)
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -44,16 +48,13 @@
 
 ;; Auto install packages not present
 (defvar my-packages '(auto-complete
-                      ac-cider
                       blacken
-                      cider
                       clojure-mode
                       color-theme-approximate
                       evil
                       evil-surround
                       evil-smartparens
                       evil-commentary
-                      exec-path-from-shell
                       gist
                       helm
                       helm-projectile
@@ -68,29 +69,12 @@
                       projectile
                       python-mode
                       rainbow-delimiters
-                      smartparens
                       solarized-theme
                       undo-tree))
 (dolist (p my-packages)
   (unless (package-installed-p p)
     (package-install p)))
 
-;; '' For stuff not in package repositories
-;; (add-to-list 'load-path "/home/shemmy/.emacs.d/parinfer-mode/")
-;; 
-;; ;;Parinfer
-;; (require 'parinfer-mode)
-;; (add-hook 'prod-mode-hook 'parinfer-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'parinfer-mode)
-;; (add-hook 'lisp-mode-hook 'parinfer-mode)
-;; (add-hook 'scheme-mode-hook 'parinfer-mode)
-;; (add-hook 'clojure-mode-hook 'parinfer-mode)
-
-(require 'cider)
-
-;; Mac fix for environment var weirdness
-(when (memq window-system '(mac ns))
-  (exec-path-from-shell-initialize))
 
 ;; Evil mode stuff
 (require 'evil)
@@ -117,7 +101,6 @@
 (require 'gist)
 
 ;; Helm stuff
-(require 'helm-config)
 (helm-mode 1)
 (define-key helm-read-file-map (kbd "TAB") 'helm-execute-persistent-action)
 (define-key helm-find-files-map (kbd "TAB") 'helm-execute-persistent-action)
@@ -164,61 +147,34 @@
 (show-paren-mode 1)
 (setq show-paren-delay 0)
 
-;; Smart parentheses for lisps
-;; (require 'smartparens-config)
-;; (add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
-;; (add-hook 'lisp-mode-hook 'smartparens-mode)
-;; (add-hook 'scheme-mode-hook 'smartparens-mode)
-;; (add-hook 'clojure-mode-hook 'smartparens-mode)
-;; (add-hook 'smartparens-enabled-hook #'evil-smartparens-mode)
-
-;; (defadvice show-paren-function
-;;     (after show-matching-paren-offscreen activate)
-;;     "If the matching paren is offscreen show the matching line in the
-;;      echo area. Has no effect if the character before point is not of
-;;      syntax class ')'."
-;;     (interactive)
-;;     (let* ((cb (char-before (point)))
-;; 	   (matching-text (and cb
-;; 			       (char-equal (char-syntax cb) ?\) )
-;; 			       (blink-matching-open))))
-;;        (when matching-text (message matching-text))))
-
-
-;; Ido mode stuff
-;; (require 'ido)
-;; (ido-mode t)
-;; (setq ido-enable-flex-matching t)
-
-;; CIDER stuff
-(setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
 ;; Auto Complete stuff
 (require 'auto-complete-config)
 (setq ac-delay 0.0)
 (setq ac-quick-help-delay 0.5)
 (ac-config-default)
 
+;; CIDER stuff
+;; (require 'cider)
+;; (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+
 ;; ac-cider (clojure) stuff
-(require 'ac-cider)
-(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
-(add-hook 'cider-mode-hook 'ac-cider-setup)
-(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
-(eval-after-load "auto-complete"
-  '(progn
-     (add-to-list 'ac-modes 'cider-mode)
-     (add-to-list 'ac-modes 'cider-repl-mode)))
+;; (require 'ac-cider)
+;; (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+;; (add-hook 'cider-mode-hook 'ac-cider-setup)
+;; (add-hook 'cider-repl-mode-hook 'ac-cider-setup)
+;; (eval-after-load "auto-complete"
+;;   '(progn
+;;      (add-to-list 'ac-modes 'cider-mode)
+;;      (add-to-list 'ac-modes 'cider-repl-mode)))
 
 ;; Popping-up contextual docs
-(eval-after-load "cider"
-  '(define-key cider-mode-map (kbd "C-c C-d") 'ac-cider-popup-doc))
+;; (eval-after-load "cider"
+;;   '(define-key cider-mode-map (kbd "C-c C-d") 'ac-cider-popup-doc))
 
 ;; Python auto complete
 ;; (add-hook 'python-mode-hook 'jedi:setup)
 ;; (setq jedi:complete-on-dot t)
 
-;; Solarized theme
-(color-theme-approximate-on)
-(load-theme 'solarized-dark t)
 
 ;; Powerline stuff
 (require 'powerline)
@@ -233,6 +189,10 @@
 (set-face-attribute 'mode-line-inactive nil
                     :inverse-video nil
                     :box nil)
+
+;; Solarized theme
+(color-theme-approximate-on)
+(load-theme 'solarized-dark t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -240,7 +200,11 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("51ec7bfa54adf5fff5d466248ea6431097f5a18224788d0bd7eb1257a4f7b773" "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5" "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75" "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3" default)))
+    ("51ec7bfa54adf5fff5d466248ea6431097f5a18224788d0bd7eb1257a4f7b773"
+     "7f1d414afda803f3244c6fb4c2c64bea44dac040ed3731ec9d75275b9e831fe5"
+     "0fffa9669425ff140ff2ae8568c7719705ef33b7a927a0ba7c5e2ffcfac09b75"
+     "2809bcb77ad21312897b541134981282dc455ccd7c14d74cc333b6e549b824f3"
+     default)))
  '(line-number-mode nil)
  '(package-selected-packages
    (quote
