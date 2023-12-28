@@ -33,6 +33,8 @@
 
 ;; Use spaces instead of tabs
 (setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(defvaralias 'c-basic-offset 'tab-width)
 
 ;; Show line at 80 chars
 (setq-default fill-column 80)
@@ -172,8 +174,8 @@
 ;;   '(define-key cider-mode-map (kbd "C-c C-d") 'ac-cider-popup-doc))
 
 ;; Python auto complete
-;; (add-hook 'python-mode-hook 'jedi:setup)
-;; (setq jedi:complete-on-dot t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 
 
 ;; Powerline stuff

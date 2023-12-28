@@ -7,59 +7,31 @@ augroup myvimrc
 augroup END
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Vundle Plugin Manager
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set nocompatible              " be iMproved, required
-filetype off                  " required
+call plug#begin()
+" The default plugin directory will be as follows:
+"   - Vim (Linux/macOS): '~/.vim/plugged'
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+Plug 'ericbn/vim-solarized'
+Plug 'kien/ctrlp.vim'
+Plug 'd11wtq/ctrlp_bdelete.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'bling/vim-airline'
+Plug 'mattn/webapi-vim'
+Plug 'mattn/gist-vim'
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+" Initialize plugin system
+" - Automatically executes `filetype plugin indent on` and `syntax enable`.
+call plug#end()
+" You can revert the settings after the call like so:
+"   filetype indent off   " Disable file-type-specific indentation
+"   syntax off            " Disable syntax highlighting
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'kien/ctrlp.vim'
-Plugin 'd11wtq/ctrlp_bdelete.vim'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-surround'
-Plugin 'bling/vim-airline'
-" Plugin 'bling/vim-bufferline'
-Plugin 'mitsuhiko/vim-jinja'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'mattn/webapi-vim'
-Plugin 'mattn/gist-vim'
-
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Plugin Setings
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color and highlighting
 syntax enable
 set background=dark
-set t_Co=16
-if !has('gui_running')
-  let g:solarized_termcolors=&t_Co
-endif
+set termguicolors
 colorscheme solarized
 
 " Airline settings

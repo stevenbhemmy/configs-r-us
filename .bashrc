@@ -15,11 +15,15 @@ fi
 # export WORKON_HOME
 # source /usr/bin/virtualenvwrapper.sh
 
+export EDITOR='vim'
+export VISUAL='vim'
+
 # Generic timestamp for backups/migrations/etc
 alias upnow="NOW=$(date "+%Y-%m-%d-%H%M%S")"
 
 # Change terminal colors for Solarized colorscheme
 # export TERM=screen-256color-bce
 
-# Enable autocomplete for rhc tool from OpenShift
-. /home/shemmy/.openshift/bash_autocomplete
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion

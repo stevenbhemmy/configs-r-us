@@ -27,8 +27,8 @@ colors
 autoload -Uz compinit vcs_info
 compinit
 HISTFILE=~/.histfile
-HISTSIZE=3500
-SAVEHIST=3500
+HISTSIZE=5000
+SAVEHIST=5000
 setopt appendhistory sharehistory autocd transient_rprompt hist_ignore_all_dups prompt_subst
 bindkey -e
 
@@ -104,6 +104,7 @@ alias -g '.......'='../../../../../..'
 alias mv='nocorrect mv -i'
 alias cp='nocorrect cp'
 alias mkdir='nocorrect mkdir'
+alias ls='ls --color=auto'
 
 # Set the window title in screen to the running program
 exec_time="$SECONDS"
@@ -216,10 +217,32 @@ $userpart $tty_color%l $(time_display)%(?..$error_color %? $end_error_color)
 $(virt_prompt)$prompt_color%#%{$reset_color%} '
 export RPS1='$path_color%/%{$reset_color%} $(vcs_prompt)'
 
+# load autocopmletions (poetry)
+fpath+=~/.zfunc
+autoload -Uz compinit && compinit
 
+
+# python virtualenv convenience
 workon (){
-    pyenv activate $1
+    if [[ -n "$2" ]]; then
+        pyenv activate $2
+    else
+        pyenv activate $1
+    fi
     cd ~/sites/$1
+}
+
+mkprojdirs (){
+    mkdir ~/sites/$1
+    cd ~/sites/$1
+    mkdir proj
+    mkdir src
+    mkdir htdocs
+    mkdir htdocs/static
+    mkdir htdocs/media
+    mkdir var
+    mkdir var/log
+    mkdir var/run
 }
 
 # Python Poetry config
@@ -235,3 +258,8 @@ export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
 
 export N_PREFIX="$HOME/.n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+
+
+# UIC Project configs
+export TUTOR_ROOT=~/sites/uic/proj/uic
+export TUTOR_PLUGINS_ROOT=~/sites/uic/proj/uic_plugins
